@@ -15,6 +15,12 @@
   "author": "InvalidJokerDE",
   "license": "MIT",
   "devDependencies": {
-    "ts-node": "^10.9.2"
+    "@types/node": "^20.11.28",
+    "prisma": "^5.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1"
   }
 }
