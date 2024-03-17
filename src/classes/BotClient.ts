@@ -8,4 +8,10 @@ export class BotClient extends Client {
     });
   }
   public logger = new Logger(this);
+
+  async start(): Promise<void> {
+    this.logger.info("Bot is starting...");
+
+    this.login(process.env.BOT_TOKEN);
+  }
 }
