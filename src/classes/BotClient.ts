@@ -18,6 +18,7 @@ export class BotClient extends Client {
     this.logger.info("Bot is starting...");
 
     await this.eventHandler.loadEvents();
+    await this.commandHandler.loadCommands();
 
     this.login(process.env.BOT_TOKEN);
   }

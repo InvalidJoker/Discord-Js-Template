@@ -19,6 +19,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["./src/types/globals.d.ts", "src/**/*.ts"],
-  "exclude": ["./backup", "./tmp", "./scripts", "./tests", "./build"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["./tmp", "./scripts", "./build"]
 }

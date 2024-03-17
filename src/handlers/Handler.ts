@@ -3,13 +3,25 @@ import { BotClient } from "../classes/BotClient";
 import { readdir, lstat } from "node:fs/promises";
 import path from "node:path";
 
+interface LoadDirectoryOptions {
+  root: string;
+  maxDeep?: number;
+  fileNames?: string[];
+  currentDeep?: number;
+}
+
 export class Handler {
   constructor(client: BotClient) {
     this.client = client;
   }
   public client: BotClient;
 
-  async loadDirectory(root: string): Promise<string[]> {
+  async loadDirectory({
+    root,
+    maxDeep,
+    fileNames,
+    currentDeep,
+  }: LoadDirectoryOptions): Promise<string[]> {
     const fs = await readdir(root);
     const files: string[] = [];
 
@@ -18,9 +30,21 @@ export class Handler {
       const stat = await lstat(fp);
 
       if (stat.isDirectory()) {
-        const subFiles = await this.loadDirectory(fp);
+        if (maxDeep && currentDeep && currentDeep >= maxDeep) {
+          continue;
+        }
+        const subFiles = await this.loadDirectory({
+          root: fp,
+          maxDeep,
+          fileNames,
+          currentDeep: currentDeep ? currentDeep + 1 : 1,
+        });
+
         files.push(...subFiles);
       } else {
+        if (fileNames && !fileNames.includes(file)) {
+          continue;
+        }
         files.push(fp);
       }
     }

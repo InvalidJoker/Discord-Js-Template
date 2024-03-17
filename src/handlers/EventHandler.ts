@@ -3,9 +3,9 @@ import path from "node:path";
 
 export class EventHandler extends Handler {
   async loadEvents(): Promise<void> {
-    const files = await this.loadDirectory(
-      path.resolve(__dirname, "../events")
-    );
+    const files = await this.loadDirectory({
+      root: path.resolve(__dirname, "../events"),
+    });
 
     for (const file of files) {
       const { default: Event } = await import(file);

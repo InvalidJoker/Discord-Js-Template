@@ -20,11 +20,9 @@ export interface CommandContext {
   args: Record<string, ArgumentType>;
 }
 
-export type CommandExecutionFunction = (
-  client: BotClient,
-  message: ChatInputCommandInteraction<CacheType> | Message<boolean>,
-  context: CommandContext
-) => Promise<void>;
+export type CommandMessage =
+  | ChatInputCommandInteraction<CacheType>
+  | Message<boolean>;
 
 export default abstract class Command {
   public readonly name: string = "";
@@ -42,7 +40,11 @@ export default abstract class Command {
 
   public readonly permissions: PermissionResolvable[] = [];
 
-  abstract execute: CommandExecutionFunction;
+  abstract execute(
+    client: BotClient,
+    message: CommandMessage,
+    context: CommandContext
+  ): Promise<void>;
 
   protected constructor(protected client: BotClient) {}
 
@@ -52,3 +54,33 @@ export default abstract class Command {
 }
 
 // command will be created like this: /<group> <name> <options>
+
+export class SubCommand extends Command {
+  public readonly name = "subcommand";
+
+  public readonly description = "A subcommand";
+
+  public readonly subCommands = [new SubCommandGroup(this.client)];
+
+  async execute(
+    client: BotClient,
+    message: CommandMessage,
+    context: CommandContext
+  ): Promise<void> {
+    console.log(context);
+  }
+}
+
+export class SubCommandGroup extends Command {
+  public readonly name = "subcommandgroup";
+
+  public readonly description = "A subcommand group";
+
+  async execute(
+    client: BotClient,
+    message: CommandMessage,
+    context: CommandContext
+  ): Promise<void> {
+    console.log(context);
+  }
+}
